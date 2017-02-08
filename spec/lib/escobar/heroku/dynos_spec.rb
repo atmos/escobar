@@ -33,5 +33,7 @@ describe Escobar::Heroku::Dynos do
 
     expect(dynos).to be_newer_than(Time.parse("2017-02-05T08:03:17Z").utc)
     expect(dynos).to_not be_newer_than(Time.parse("2017-02-06T08:03:17Z").utc)
+
+    expect(dynos).to be_running("715b6e1d-542b-40e1-9c7b-3d3128e78873")
   end
 end
