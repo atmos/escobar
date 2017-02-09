@@ -109,6 +109,12 @@ module Escobar
         app.app
       end
 
+      def heroku_application_by_environment_and_name(stage, name)
+        environments[stage].find do |app|
+          return app.app if name == app.app.name
+        end
+      end
+
       def create_deployment(ref, environment, force = false, payload = {})
         heroku_app = default_heroku_application(environment)
 

@@ -142,7 +142,7 @@ module Escobar
       end
 
       def required_commit_contexts
-        return [] if forced
+        return [] if forced || environment != "production"
         github_client.required_contexts.map do |context|
           if context == "continuous-integration/travis-ci"
             context = "continuous-integration/travis-ci/push"
