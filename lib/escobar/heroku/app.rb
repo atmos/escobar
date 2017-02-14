@@ -32,6 +32,10 @@ module Escobar
         @dynos ||= Escobar::Heroku::Dynos.new(client, id)
       end
 
+      def config_vars
+        @config_vars ||= Escobar::Heroku::ConfigVars.new(client, id)
+      end
+
       def dashboard_url
         "https://dashboard.heroku.com/apps/#{name}"
       end
