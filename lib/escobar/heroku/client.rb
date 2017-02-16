@@ -77,8 +77,8 @@ module Escobar
         if token
           request.headers["Authorization"] = "Bearer #{token}"
         end
-        request.options.timeout = 5
-        request.options.open_timeout = 2
+        request.options.timeout = Escobar.http_timeout
+        request.options.open_timeout = Escobar.http_open_timeout
       end
 
       def heroku_accept_header(version)

@@ -48,6 +48,14 @@ module Escobar
   def self.zipkin_enabled?
     !ENV["ZIPKIN_SERVICE_NAME"].nil? && !ENV["ZIPKIN_API_HOST"].nil?
   end
+
+  def self.http_open_timeout
+    3
+  end
+
+  def self.http_timeout
+    6
+  end
 end
 
 require_relative "./escobar/client"
