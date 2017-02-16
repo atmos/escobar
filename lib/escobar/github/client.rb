@@ -78,8 +78,8 @@ module Escobar
       def get(path)
         response = http_method(:get, path)
         JSON.parse(response.body)
-      rescue StandardError
-        response && response.body
+      rescue StandardError => e
+        raise Escobar::Client::HTTPError.from_response(e, response)
       end
 
       def accept_headers
@@ -92,26 +92,28 @@ module Escobar
           request.headers["Accept"] = accept_headers
           request.headers["Content-Type"] = "application/json"
           request.headers["Authorization"] = "token #{token}"
-          request.options.timeout = 5
-          request.options.open_timeout = 2
+          request.options.timeout = Escobar.http_timeout
+          request.options.open_timeout = Escobar.http_open_timeout
         end
       end
 
+      # rubocop:disable Metrics/AbcSize
       def post(path, body)
         response = client.post do |request|
           request.url path
           request.headers["Accept"] = accept_headers
           request.headers["Content-Type"] = "application/json"
           request.headers["Authorization"] = "token #{token}"
-          request.options.timeout = 5
-          request.options.open_timeout = 2
+          request.options.timeout = Escobar.http_timeout
+          request.options.open_timeout = Escobar.http_open_timeout
           request.body = body.to_json
         end
 
         JSON.parse(response.body)
-      rescue StandardError
-        response && response.body
+      rescue StandardError => e
+        raise Escobar::Client::HTTPError.from_response(e, response)
       end
+      # rubocop:enable Metrics/AbcSize
 
       private
 

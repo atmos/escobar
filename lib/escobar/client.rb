@@ -1,6 +1,21 @@
 module Escobar
   # Top-level client for heroku
   class Client
+    # Class for returning API errors to escobar clients
+    class HTTPError < StandardError
+      attr_accessor :body, :headers, :status
+      def self.from_response(err, response)
+        error = new("Error from Heroku API")
+
+        error.body    = response.body
+        error.status  = response.status
+        error.headers = response.headers
+
+        error.set_backtrace(err.backtrace)
+        error
+      end
+    end
+
     def self.from_environment
       new(Escobar.github_api_token, Escobar.heroku_api_token)
     end

@@ -52,6 +52,9 @@ module Escobar
       def locked?
         response = client.heroku.get("/apps/#{id}/config-vars")
         response["id"] == "two_factor"
+      rescue Escobar::Heroku::Client::HTTPError => e
+        response = JSON.parse(e.response.body)
+        response["id"] == "two_factor"
       end
 
       def build_request_for(pipeline)

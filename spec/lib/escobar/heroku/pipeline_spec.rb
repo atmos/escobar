@@ -100,7 +100,7 @@ describe Escobar::Heroku::Pipeline do
       stub_kolkrabbi_response("#{pipeline_path}/repository")
 
       stub_request(:get, "https://api.heroku.com/apps/b0deddbf-cf56-48e4-8c3a-3ea143be2333/config-vars")
-        .to_return(status: 200, body: "", headers: {})
+        .to_return(status: 200, body: { "RACK_ENV": "production" }.to_json, headers: {})
 
       response = fixture_data("api.github.com/repos/atmos/slash-heroku/index")
       stub_request(:get, "https://api.github.com/repos/atmos/slash-heroku")

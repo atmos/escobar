@@ -26,8 +26,8 @@ module Escobar
         end
 
         JSON.parse(response.body)
-      rescue StandardError
-        response && response.body
+      rescue StandardError => e
+        raise Escobar::Client::HTTPError.from_response(e, response)
       end
 
       def get_range(path, range, version = 3)
@@ -38,8 +38,8 @@ module Escobar
         end
 
         JSON.parse(response.body)
-      rescue StandardError
-        response && response.body
+      rescue StandardError => e
+        raise Escobar::Client::HTTPError.from_response(e, response)
       end
 
       def post(path, body)
@@ -50,8 +50,8 @@ module Escobar
         end
 
         JSON.parse(response.body)
-      rescue StandardError
-        response && response.body
+      rescue StandardError => e
+        raise Escobar::Client::HTTPError.from_response(e, response)
       end
 
       def put(path, second_factor = nil)
@@ -64,8 +64,8 @@ module Escobar
         end
 
         JSON.parse(response.body)
-      rescue StandardError
-        response && response.body
+      rescue StandardError => e
+        raise Escobar::Client::HTTPError.from_response(e, response)
       end
 
       private
@@ -77,8 +77,8 @@ module Escobar
         if token
           request.headers["Authorization"] = "Bearer #{token}"
         end
-        request.options.timeout = 5
-        request.options.open_timeout = 2
+        request.options.timeout = Escobar.http_timeout
+        request.options.open_timeout = Escobar.http_open_timeout
       end
 
       def heroku_accept_header(version)
