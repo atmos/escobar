@@ -3,6 +3,16 @@ module Escobar
   module Heroku
     # Top-level client for interacting with Heroku API
     class Client
+      # Class for returning API errors to escobar clients
+      class HTTPError < StandardError
+        attr_accessor :response
+        def self.from_response(response)
+          error = new("Error from Heroku API")
+          error.response = response
+          error
+        end
+      end
+
       attr_reader :client, :token
       def initialize(token)
         @token = token
@@ -27,7 +37,7 @@ module Escobar
 
         JSON.parse(response.body)
       rescue StandardError
-        response && response.body
+        raise HTTPError.from_response(response)
       end
 
       def get_range(path, range, version = 3)
@@ -39,7 +49,7 @@ module Escobar
 
         JSON.parse(response.body)
       rescue StandardError
-        response && response.body
+        raise HTTPError.from_response(response)
       end
 
       def post(path, body)
@@ -51,7 +61,7 @@ module Escobar
 
         JSON.parse(response.body)
       rescue StandardError
-        response && response.body
+        raise HTTPError.from_response(response)
       end
 
       def put(path, second_factor = nil)
@@ -65,7 +75,7 @@ module Escobar
 
         JSON.parse(response.body)
       rescue StandardError
-        response && response.body
+        raise HTTPError.from_response(response)
       end
 
       private
