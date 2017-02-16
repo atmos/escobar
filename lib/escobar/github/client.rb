@@ -78,8 +78,8 @@ module Escobar
       def get(path)
         response = http_method(:get, path)
         JSON.parse(response.body)
-      rescue StandardError
-        response && response.body
+      rescue StandardError => e
+        raise Escobar::Client::HTTPError.from_response(e, response)
       end
 
       def accept_headers
@@ -97,6 +97,7 @@ module Escobar
         end
       end
 
+      # rubocop:disable Metrics/AbcSize
       def post(path, body)
         response = client.post do |request|
           request.url path
@@ -109,9 +110,10 @@ module Escobar
         end
 
         JSON.parse(response.body)
-      rescue StandardError
-        response && response.body
+      rescue StandardError => e
+        raise Escobar::Client::HTTPError.from_response(e, response)
       end
+      # rubocop:enable Metrics/AbcSize
 
       private
 
