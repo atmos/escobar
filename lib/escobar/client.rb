@@ -7,9 +7,15 @@ module Escobar
       def self.from_response(err, response)
         error = new("Error from Heroku API")
 
-        error.body    = response.body
-        error.status  = response.status
-        error.headers = response.headers
+        if response.respond_to?(:body)
+          error.body    = response.body
+        end
+        if response.respond_to?(:status)
+          error.status  = response.status
+        end
+        if response.respond_to?(:headers)
+          error.headers = response.headers
+        end
 
         error.set_backtrace(err.backtrace)
         error
