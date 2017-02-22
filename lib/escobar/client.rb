@@ -1,6 +1,14 @@
 module Escobar
   # Top-level client for heroku
   class Client
+    # TimeoutError class when API timeouts
+    class TimeoutError < StandardError
+      attr_reader :cause
+      def initialize(err)
+        @cause = err
+        self.set_backtrace(err.backtrace)
+      end
+    end
     # Class for returning API errors to escobar clients
     class HTTPError < StandardError
       attr_accessor :body, :headers, :status
