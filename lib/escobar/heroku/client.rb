@@ -3,10 +3,9 @@ module Escobar
   module Heroku
     # Top-level client for interacting with Heroku API
     class Client
-      attr_reader :client, :token
+      attr_reader :token
       def initialize(token)
         @token = token
-        @client = Escobar.zipkin_enabled? ? zipkin_client : default_client
       end
 
       # mask password
@@ -72,6 +71,10 @@ module Escobar
       end
 
       private
+
+      def client
+        @client ||= Escobar.zipkin_enabled? ? zipkin_client : default_client
+      end
 
       def request_defaults(request, version = 3)
         request.headers["Accept"]          = heroku_accept_header(version)

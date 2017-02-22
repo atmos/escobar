@@ -3,7 +3,7 @@ require "spec_helper"
 RSpec.describe Escobar::Heroku::Client do
   let(:client) { Escobar::Heroku::Client.new("123") }
   it "should rescue timeout errors" do
-    expect(client.client).to receive(:get).and_raise(Net::OpenTimeout)
+    stub_request(:get, "https://api.heroku.com/account").to_timeout
     expect do
       client.get("/account")
     end.to raise_error(Escobar::Client::TimeoutError)
@@ -15,7 +15,8 @@ RSpec.describe Escobar::Heroku::Client do
       headers: { something: true },
       status: 502
     })
-    expect(client.client).to receive(:get).and_raise(faraday_error)
+    stub_request(:get, "https://api.heroku.com/account")
+      .to_raise(faraday_error)
     expect do
       client.get("/account")
     end.to raise_error(Escobar::Client::HTTPError) do |e|
