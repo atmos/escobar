@@ -27,6 +27,8 @@ module Escobar
         end
 
         JSON.parse(response.body)
+      rescue Net::OpenTimeout => e
+        raise Escobar::Client::TimeoutError.new(e)
       rescue StandardError => e
         raise Escobar::Client::HTTPError.from_response(e, response)
       end
