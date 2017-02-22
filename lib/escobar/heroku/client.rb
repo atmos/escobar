@@ -6,6 +6,7 @@ module Escobar
       attr_reader :client, :token
       def initialize(token)
         @token = token
+        @client = Escobar.zipkin_enabled? ? zipkin_client : default_client
       end
 
       # mask password
@@ -83,10 +84,6 @@ module Escobar
 
       def heroku_accept_header(version)
         "application/vnd.heroku+json; version=#{version}"
-      end
-
-      def client
-        @client ||= Escobar.zipkin_enabled? ? zipkin_client : default_client
       end
 
       def zipkin_client
