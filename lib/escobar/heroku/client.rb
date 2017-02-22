@@ -30,7 +30,7 @@ module Escobar
       rescue Net::OpenTimeout => e
         raise Escobar::Client::TimeoutError.new(e)
       rescue StandardError => e
-        raise Escobar::Client::HTTPError.from_response(e, response)
+        raise Escobar::Client::HTTPError.from_response(e)
       end
 
       def get_range(path, range, version = 3)
@@ -42,7 +42,7 @@ module Escobar
 
         JSON.parse(response.body)
       rescue StandardError => e
-        raise Escobar::Client::HTTPError.from_response(e, response)
+        raise Escobar::Client::HTTPError.from_response(e)
       end
 
       def post(path, body)
@@ -54,7 +54,7 @@ module Escobar
 
         JSON.parse(response.body)
       rescue StandardError => e
-        raise Escobar::Client::HTTPError.from_response(e, response)
+        raise Escobar::Client::HTTPError.from_response(e)
       end
 
       def put(path, second_factor = nil)
@@ -68,7 +68,7 @@ module Escobar
 
         JSON.parse(response.body)
       rescue StandardError => e
-        raise Escobar::Client::HTTPError.from_response(e, response)
+        raise Escobar::Client::HTTPError.from_response(e)
       end
 
       private
