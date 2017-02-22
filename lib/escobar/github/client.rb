@@ -78,8 +78,6 @@ module Escobar
       def get(path)
         response = http_method(:get, path)
         JSON.parse(response.body)
-      rescue StandardError => e
-        raise Escobar::Client::HTTPError.from_response(e)
       end
 
       def accept_headers
@@ -95,6 +93,10 @@ module Escobar
           request.options.timeout = Escobar.http_timeout
           request.options.open_timeout = Escobar.http_open_timeout
         end
+      rescue Net::OpenTimeout, Faraday::TimeoutError => e
+        raise Escobar::Client::TimeoutError.new(e)
+      rescue Faraday::Error::ClientError => e
+        raise Escobar::Client::HTTPError.from_response(e)
       end
 
       # rubocop:disable Metrics/AbcSize
@@ -110,7 +112,9 @@ module Escobar
         end
 
         JSON.parse(response.body)
-      rescue StandardError => e
+      rescue Net::OpenTimeout, Faraday::TimeoutError => e
+        raise Escobar::Client::TimeoutError.new(e)
+      rescue Faraday::Error::ClientError => e
         raise Escobar::Client::HTTPError.from_response(e)
       end
       # rubocop:enable Metrics/AbcSize

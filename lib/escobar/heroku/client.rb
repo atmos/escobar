@@ -26,9 +26,9 @@ module Escobar
         end
 
         JSON.parse(response.body)
-      rescue Net::OpenTimeout => e
+      rescue Net::OpenTimeout, Faraday::TimeoutError => e
         raise Escobar::Client::TimeoutError.new(e)
-      rescue StandardError => e
+      rescue Faraday::Error::ClientError => e
         raise Escobar::Client::HTTPError.from_response(e)
       end
 
@@ -40,7 +40,9 @@ module Escobar
         end
 
         JSON.parse(response.body)
-      rescue StandardError => e
+      rescue Net::OpenTimeout, Faraday::TimeoutError => e
+        raise Escobar::Client::TimeoutError.new(e)
+      rescue Faraday::Error::ClientError => e
         raise Escobar::Client::HTTPError.from_response(e)
       end
 
@@ -52,7 +54,9 @@ module Escobar
         end
 
         JSON.parse(response.body)
-      rescue StandardError => e
+      rescue Net::OpenTimeout, Faraday::TimeoutError => e
+        raise Escobar::Client::TimeoutError.new(e)
+      rescue Faraday::Error::ClientError => e
         raise Escobar::Client::HTTPError.from_response(e)
       end
 
@@ -66,7 +70,9 @@ module Escobar
         end
 
         JSON.parse(response.body)
-      rescue StandardError => e
+      rescue Net::OpenTimeout, Faraday::TimeoutError => e
+        raise Escobar::Client::TimeoutError.new(e)
+      rescue Faraday::Error::ClientError => e
         raise Escobar::Client::HTTPError.from_response(e)
       end
 
