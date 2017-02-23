@@ -17,14 +17,18 @@ module Escobar
         @info ||= client.heroku.get("/apps/#{app_id}/dynos")
       end
 
+      def non_one_off
+        info.reject { |dyno| dyno["type"] == "run" }
+      end
+
       def running?(release_id)
-        info.all? do |dyno|
+        non_one_off.all? do |dyno|
           dyno["release"]["id"] == release_id && dyno["state"] == "up"
         end
       end
 
       def newer_than?(epoch)
-        info.all? do |dyno|
+        non_one_off.all? do |dyno|
           epoch < Time.parse(dyno["created_at"]).utc
         end
       end
