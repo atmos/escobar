@@ -3,6 +3,10 @@ module Escobar
   class Client
     # TimeoutError class when API timeouts
     class TimeoutError < StandardError
+      def self.wrap(err)
+        new(err)
+      end
+
       attr_reader :cause
       def initialize(err)
         @cause = err

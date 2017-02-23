@@ -20,63 +20,63 @@ module Escobar
       end
 
       def get(path, version = 3)
-        response = client.get do |request|
-          request.url path
-          request_defaults(request, version)
-        end
+        with_error_handling do
+          response = client.get do |request|
+            request.url path
+            request_defaults(request, version)
+          end
 
-        JSON.parse(response.body)
-      rescue Net::OpenTimeout, Faraday::TimeoutError => e
-        raise Escobar::Client::TimeoutError.new(e)
-      rescue Faraday::Error::ClientError => e
-        raise Escobar::Client::HTTPError.from_response(e)
+          JSON.parse(response.body)
+        end
       end
 
       def get_range(path, range, version = 3)
-        response = client.get do |request|
-          request.url path
-          request_defaults(request, version)
-          request.headers["Range"] = range
-        end
+        with_error_handling do
+          response = client.get do |request|
+            request.url path
+            request_defaults(request, version)
+            request.headers["Range"] = range
+          end
 
-        JSON.parse(response.body)
-      rescue Net::OpenTimeout, Faraday::TimeoutError => e
-        raise Escobar::Client::TimeoutError.new(e)
-      rescue Faraday::Error::ClientError => e
-        raise Escobar::Client::HTTPError.from_response(e)
+          JSON.parse(response.body)
+        end
       end
 
       def post(path, body)
-        response = client.post do |request|
-          request.url path
-          request_defaults(request)
-          request.body = body.to_json
-        end
+        with_error_handling do
+          response = client.post do |request|
+            request.url path
+            request_defaults(request)
+            request.body = body.to_json
+          end
 
-        JSON.parse(response.body)
-      rescue Net::OpenTimeout, Faraday::TimeoutError => e
-        raise Escobar::Client::TimeoutError.new(e)
-      rescue Faraday::Error::ClientError => e
-        raise Escobar::Client::HTTPError.from_response(e)
+          JSON.parse(response.body)
+        end
       end
 
       def put(path, second_factor = nil)
-        response = client.put do |request|
-          request.url path
-          request_defaults(request)
-          if second_factor
-            request.headers["Heroku-Two-Factor-Code"] = second_factor
+        with_error_handling do
+          response = client.put do |request|
+            request.url path
+            request_defaults(request)
+            if second_factor
+              request.headers["Heroku-Two-Factor-Code"] = second_factor
+            end
           end
-        end
 
-        JSON.parse(response.body)
-      rescue Net::OpenTimeout, Faraday::TimeoutError => e
-        raise Escobar::Client::TimeoutError.new(e)
-      rescue Faraday::Error::ClientError => e
-        raise Escobar::Client::HTTPError.from_response(e)
+          JSON.parse(response.body)
+        end
       end
 
       private
+
+      def with_error_handling
+        yield
+      rescue Net::OpenTimeout, Faraday::TimeoutError => e
+        raise Escobar::Client::TimeoutError.wrap(e)
+      rescue Faraday::Error::ClientError => e
+        raise Escobar::Client::HTTPError.from_response(e)
+      end
 
       def client
         @client ||= Escobar.zipkin_enabled? ? zipkin_client : default_client

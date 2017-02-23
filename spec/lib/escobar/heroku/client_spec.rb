@@ -10,18 +10,20 @@ RSpec.describe Escobar::Heroku::Client do
   end
 
   it "should correctly handle response from a Faraday ClientError" do
-    faraday_error = Faraday::Error::ClientError.new("message", {
+    faraday_error = Faraday::Error::ClientError.new(
+      "message",
       body: "body",
-      headers: { something: true },
+      headers: {
+        something: true
+      },
       status: 502
-    })
+    )
     stub_request(:get, "https://api.heroku.com/account")
       .to_raise(faraday_error)
-    expect do
-      client.get("/account")
-    end.to raise_error(Escobar::Client::HTTPError) do |e|
+    expect { client.get("/account") }
+      .to raise_error(Escobar::Client::HTTPError) do |e|
       expect(e.body).to eql("body")
-      expect(e.headers).to eql({something: true})
+      expect(e.headers).to eql(something: true)
       expect(e.status).to eql(502)
     end
   end
