@@ -17,6 +17,9 @@ module Escobar
         end
       end
 
+      class RequiresTwoFactorError < Error
+      end
+
       attr_reader :app_id, :github_deployment_url, :pipeline, :sha
 
       attr_accessor :environment, :ref, :forced, :custom_payload
@@ -39,9 +42,7 @@ module Escobar
       end
 
       def create(task, environment, ref, forced, custom_payload)
-        if app.locked?
-          raise error_for("Application requires second factor: #{app.name}")
-        end
+        raise_2fa_error if app.locked?
 
         @environment = environment
         @ref = ref
@@ -49,6 +50,11 @@ module Escobar
         @custom_payload = custom_payload
 
         create_in_api(task)
+      end
+
+      def raise_2fa_error
+        message = "Application requires second factor: #{app.name}"
+        raise RequiresTwoFactorError.new_from_build_request(self, message)
       end
 
       def create_in_api(task)
