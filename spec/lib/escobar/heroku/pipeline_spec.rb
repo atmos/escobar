@@ -95,6 +95,8 @@ describe Escobar::Heroku::Pipeline do
       pipeline_path = "/pipelines/#{id}"
       stub_heroku_response("/apps/b0deddbf-cf56-48e4-8c3a-3ea143be2333")
       stub_heroku_response("/apps/760bc95e-8780-4c76-a688-3a4af92a3eee")
+      stub_heroku_response("/apps/760bc95e-8780-4c76-a999-3a4af92a3eee")
+
       stub_heroku_response(pipeline_path)
       stub_heroku_response("#{pipeline_path}/pipeline-couplings")
       stub_kolkrabbi_response("#{pipeline_path}/repository")

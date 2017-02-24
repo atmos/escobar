@@ -47,10 +47,14 @@ module Escobar
       end
 
       def couplings
-        @couplings ||= couplings!
+        @couplings ||= remote_couplings_with_test_stage
       end
 
-      def couplings!
+      def remote_couplings_with_test_stage
+        remote_couplings.reject { |coupling| coupling.stage == "test" }
+      end
+
+      def remote_couplings
         client.heroku.get("/pipelines/#{id}/pipeline-couplings").map do |pc|
           Escobar::Heroku::Coupling.new(client, pc)
         end
