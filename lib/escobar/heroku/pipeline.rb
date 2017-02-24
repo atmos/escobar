@@ -47,10 +47,10 @@ module Escobar
       end
 
       def couplings
-        @couplings ||= remote_couplings_with_test_stage
+        @couplings ||= remote_couplings_without_test_stage
       end
 
-      def remote_couplings_with_test_stage
+      def remote_couplings_without_test_stage
         remote_couplings.reject { |coupling| coupling.stage == "test" }
       end
 
