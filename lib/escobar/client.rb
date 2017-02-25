@@ -1,15 +1,28 @@
 module Escobar
   # Top-level client for heroku
   class Client
+    # TimeoutError class when API timeouts
+    class TimeoutError < StandardError
+      def self.wrap(err)
+        new(err)
+      end
+
+      attr_reader :cause
+      def initialize(err)
+        @cause = err
+        self.set_backtrace(err.backtrace)
+      end
+    end
+
     # Class for returning API errors to escobar clients
     class HTTPError < StandardError
       attr_accessor :body, :headers, :status
-      def self.from_response(err, response)
+      def self.from_response(err)
         error = new("Error from Heroku API")
 
-        error.body    = response.body
-        error.status  = response.status
-        error.headers = response.headers
+        error.body    = err.response[:body]
+        error.headers = err.response[:headers]
+        error.status  = err.response[:status]
 
         error.set_backtrace(err.backtrace)
         error
