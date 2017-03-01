@@ -1,0 +1,25 @@
+{
+    "documentation_url": "https://developer.github.com/v3/repos/deployments/#create-a-deployment",
+    "errors": [
+        {
+            "code": "invalid",
+            "contexts": [
+                {
+                    "context": "heroku/compliance",
+                    "state": "pending"
+                },
+                {
+                    "context": "vulnerabilities/gems",
+                    "state": "success"
+                },
+                {
+                    "context": "continuous-integration/heroku",
+                    "state": "pending"
+                }
+            ],
+            "field": "required_contexts",
+            "resource": "Deployment"
+        }
+    ],
+    "message": "Conflict: Commit status checks failed for less-buttons."
+}
