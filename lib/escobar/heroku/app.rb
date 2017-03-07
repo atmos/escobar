@@ -52,9 +52,22 @@ module Escobar
       def locked?
         response = client.heroku.get("/apps/#{id}/config-vars")
         response["id"] == "two_factor"
-      rescue Escobar::Heroku::Client::HTTPError => e
+      rescue Escobar::Client::HTTPError => e
         response = JSON.parse(e.response.body)
         response["id"] == "two_factor"
+      end
+
+      def direct_to_drain?
+        response = client.heroku.get("/apps/#{id}/log-drains")
+        !response.is_a?(Array)
+      rescue Escobar::Client::HTTPError => e
+        response = JSON.parse(e.response.body)
+        response["id"] == "forbidden" &&
+          response["message"].match(/This Private Space uses direct logging/)
+      end
+
+      def log_url
+        @log_url ||= "#{dashboard_url}/logs"
       end
 
       def build_request_for(pipeline)
