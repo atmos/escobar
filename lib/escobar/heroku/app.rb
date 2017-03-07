@@ -57,6 +57,20 @@ module Escobar
         response["id"] == "two_factor"
       end
 
+      def direct_to_drain?
+        response = client.heroku.get("/apps/#{id}/log-drains")
+        response["id"] == "two_factor" &&
+          response["message"].match(/"This Private Space uses direct logging/)
+      rescue Escobar::Heroku::Client::HTTPError => e
+        response = JSON.parse(e.response.body)
+        response["id"] == "two_factor" &&
+          response["message"].match(/"This Private Space uses direct logging/)
+      end
+
+      def log_url
+        @log_url ||= "#{dashboard_url}/logs"
+      end
+
       def build_request_for(pipeline)
         Escobar::Heroku::BuildRequest.new(pipeline, id)
       end

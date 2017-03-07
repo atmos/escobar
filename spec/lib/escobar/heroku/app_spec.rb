@@ -66,6 +66,11 @@ describe Escobar::Heroku::App do
       .to eql("escobar-app-b0deddbf-cf56-48e4-8c3a-3ea143be2333")
   end
 
+  it "has a log url" do
+    expect(app.log_url)
+      .to eql("https://dashboard.heroku.com/apps/slash-heroku-production/logs")
+  end
+
   it "lists releases" do
     path = "/apps/b0deddbf-cf56-48e4-8c3a-3ea143be2333/releases"
     stub_request(:get, "https://api.heroku.com#{path}")
