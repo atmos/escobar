@@ -71,6 +71,28 @@ describe Escobar::Heroku::App do
       .to eql("https://dashboard.heroku.com/apps/slash-heroku-production/logs")
   end
 
+  it "detects direct to drain logging enabled" do
+    path = "/apps/b0deddbf-cf56-48e4-8c3a-3ea143be2333/log-drains"
+    failure_message = {
+      id: "forbidden",
+      message: "This Private Space uses direct logging which " \
+               "is incompatible with this feature."
+    }
+    stub_request(:get, "https://api.heroku.com#{path}")
+      .with(headers: default_heroku_headers)
+      .to_return(status: 403, body: failure_message.to_json)
+
+    expect(app).to be_direct_to_drain
+  end
+
+  it "detects log drains are enanled" do
+    path = "/apps/b0deddbf-cf56-48e4-8c3a-3ea143be2333/log-drains"
+    stub_request(:get, "https://api.heroku.com#{path}")
+      .with(headers: default_heroku_headers)
+      .to_return(status: 200, body: [].to_json)
+    expect(app).to_not be_direct_to_drain
+  end
+
   it "lists releases" do
     path = "/apps/b0deddbf-cf56-48e4-8c3a-3ea143be2333/releases"
     stub_request(:get, "https://api.heroku.com#{path}")
