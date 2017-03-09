@@ -93,6 +93,25 @@ describe Escobar::Heroku::App do
     expect(app).to_not be_direct_to_drain
   end
 
+  it "detects log drains token if present" do
+    path = "/apps/b0deddbf-cf56-48e4-8c3a-3ea143be2333/log-drains"
+    response = [
+      {
+        addon: nil,
+        created_at: "2016-09-19T13:03:13Z",
+        id: "g619cef4-4428-4e90-8668-aed85f8d9090",
+        token: "abcdef",
+        updated_at: "2016-09-19T13:03:13Z",
+        url: "https://logs.herokai.com/logs"
+      }
+    ]
+    stub_request(:get, "https://api.heroku.com#{path}")
+      .with(headers: default_heroku_headers)
+      .to_return(status: 200, body: response.to_json)
+    expect(app).to_not be_direct_to_drain
+    expect(app.drain_token).to eql("abcdef")
+  end
+
   it "lists releases" do
     path = "/apps/b0deddbf-cf56-48e4-8c3a-3ea143be2333/releases"
     stub_request(:get, "https://api.heroku.com#{path}")

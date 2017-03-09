@@ -36,6 +36,10 @@ module Escobar
         @config_vars ||= Escobar::Heroku::ConfigVars.new(client, id)
       end
 
+      def log_drains
+        @log_drains ||= client.heroku.get("/apps/#{id}/log-drains")
+      end
+
       def dashboard_url
         "https://dashboard.heroku.com/apps/#{name}"
       end
@@ -58,12 +62,11 @@ module Escobar
       end
 
       def direct_to_drain?
-        response = client.heroku.get("/apps/#{id}/log-drains")
-        !response.is_a?(Array)
-      rescue Escobar::Client::HTTPError => e
-        response = JSON.parse(e.response.body)
-        response["id"] == "forbidden" &&
-          response["message"].match(/This Private Space uses direct logging/)
+        !log_drains.is_a?(Array)
+      end
+
+      def drain_token
+        @drain_token ||= drain && drain["token"]
       end
 
       def log_url
@@ -72,6 +75,16 @@ module Escobar
 
       def build_request_for(pipeline)
         Escobar::Heroku::BuildRequest.new(pipeline, id)
+      end
+
+      def drain
+        @drain ||= log_drains.find do |drain|
+          drain["url"].match(heroku_drain_url_pattern)
+        end
+      end
+
+      def heroku_drain_url_pattern
+        %r{forward\.log\.herokai\.com:9999|logs\.herokai\.com\/logs}
       end
     end
   end
