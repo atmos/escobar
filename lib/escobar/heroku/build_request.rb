@@ -17,6 +17,7 @@ module Escobar
         end
       end
 
+      # Class representing a rejected GitHub deployment
       class MissingContextsError < Error
         attr_accessor :missing_contexts
       end
@@ -113,13 +114,10 @@ module Escobar
         msg = "Unable to create GitHub deployments for " \
           "#{pipeline.github_repository}: #{response['message']}"
         missing = missing_contexts(response)
-        if missing.any?
-          err = MissingContextsError.new_from_build_request(self, msg)
-          err.missing_contexts = missing
-          raise err
-        else
-          raise error_for(msg)
-        end
+        raise error_for(msg) unless missing.any?
+        err = MissingContextsError.new_from_build_request(self, msg)
+        err.missing_contexts = missing
+        raise err
       end
 
       def missing_contexts(response)

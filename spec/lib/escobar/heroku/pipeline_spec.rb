@@ -245,7 +245,6 @@ describe Escobar::Heroku::Pipeline do
         .to raise_error(Escobar::Heroku::BuildRequest::MissingContextsError) do |err|
         expect(err.missing_contexts)
           .to eql(["continuous-integration/travis-ci/push"])
-
       end
     end
     # rubocop:enable Metrics/LineLength
