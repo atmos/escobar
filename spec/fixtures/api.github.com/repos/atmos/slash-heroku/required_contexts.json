@@ -5,16 +5,12 @@
             "code": "invalid",
             "contexts": [
                 {
-                    "context": "heroku/compliance",
+                    "context": "continuous-integration/travis-ci/push",
                     "state": "pending"
                 },
                 {
                     "context": "vulnerabilities/gems",
                     "state": "success"
-                },
-                {
-                    "context": "continuous-integration/heroku",
-                    "state": "pending"
                 }
             ],
             "field": "required_contexts",
