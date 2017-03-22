@@ -213,6 +213,40 @@ describe Escobar::Heroku::Pipeline do
           "Application requires second factor: slash-heroku-production"
         )
     end
+
+    it "raises a MissingContextsError if required contexts are missing" do
+      pipeline_path = "/pipelines/#{id}"
+      stub_heroku_response("/apps/b0deddbf-cf56-48e4-8c3a-3ea143be2333")
+      stub_heroku_response("/apps/760bc95e-8780-4c76-a688-3a4af92a3eee")
+      stub_heroku_response(pipeline_path)
+      stub_heroku_response("#{pipeline_path}/pipeline-couplings")
+      stub_kolkrabbi_response("#{pipeline_path}/repository")
+
+      stub_request(:get, "https://api.heroku.com/apps/b0deddbf-cf56-48e4-8c3a-3ea143be2333/config-vars")
+        .to_return(status: 200, body: { "RACK_ENV": "production" }.to_json, headers: {})
+
+      response = fixture_data("api.github.com/repos/atmos/slash-heroku/index")
+      stub_request(:get, "https://api.github.com/repos/atmos/slash-heroku")
+        .with(headers: default_github_headers)
+        .to_return(status: 200, body: response, headers: {})
+
+      response = fixture_data("api.github.com/repos/atmos/slash-heroku/branches/master")
+      stub_request(:get, "https://api.github.com/repos/atmos/slash-heroku/branches/master")
+        .with(headers: default_github_headers)
+        .to_return(status: 200, body: response, headers: {})
+
+      response = fixture_data("api.github.com/repos/atmos/slash-heroku/required_contexts")
+      stub_request(:post, "https://api.github.com/repos/atmos/slash-heroku/deployments")
+        .with(headers: default_github_headers)
+        .to_return(status: 409, body: response, headers: {})
+
+      pipeline = Escobar::Heroku::Pipeline.new(client, id, name)
+      expect { pipeline.create_deployment("master", "production") }
+        .to raise_error(Escobar::Heroku::BuildRequest::MissingContextsError) do |err|
+        expect(err.missing_contexts)
+          .to eql(["continuous-integration/travis-ci/push"])
+      end
+    end
     # rubocop:enable Metrics/LineLength
   end
 end

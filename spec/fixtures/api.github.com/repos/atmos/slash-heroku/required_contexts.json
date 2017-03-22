@@ -1,0 +1,21 @@
+{
+    "documentation_url": "https://developer.github.com/v3/repos/deployments/#create-a-deployment",
+    "errors": [
+        {
+            "code": "invalid",
+            "contexts": [
+                {
+                    "context": "continuous-integration/travis-ci/push",
+                    "state": "pending"
+                },
+                {
+                    "context": "vulnerabilities/gems",
+                    "state": "success"
+                }
+            ],
+            "field": "required_contexts",
+            "resource": "Deployment"
+        }
+    ],
+    "message": "Conflict: Commit status checks failed for less-buttons."
+}

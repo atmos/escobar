@@ -17,6 +17,17 @@ module Escobar
         end
       end
 
+      # Class representing a rejected GitHub deployment
+      class MissingContextsError < Error
+        attr_accessor :missing_contexts
+        def self.new_from_build_request_and_error(build_request, error)
+          err = new(error.default_message)
+          err.build_request = build_request
+          err.missing_contexts = error.missing_contexts
+          err
+        end
+      end
+
       class RequiresTwoFactorError < Error
       end
 
@@ -97,15 +108,20 @@ module Escobar
 
       def handle_github_deployment_response(response)
         unless response["sha"]
-          raise error_for(
-            "Unable to create GitHub deployments for " \
-            "#{pipeline.github_repository}: #{response['message']}"
-          )
+          handle_github_deployment_error(response)
         end
 
         @sha = response["sha"]
         @github_deployment_url = response["url"]
         response
+      end
+
+      def handle_github_deployment_error(response)
+        error = Escobar::GitHub::DeploymentError.new(
+          pipeline.github_repository, response, required_commit_contexts
+        )
+        raise error_for(error.default_message) unless error.missing_contexts?
+        raise MissingContextsError.new_from_build_request_and_error(self, error)
       end
 
       def create_github_deployment(task)
