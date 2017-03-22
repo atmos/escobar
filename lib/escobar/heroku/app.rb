@@ -36,6 +36,10 @@ module Escobar
         @config_vars ||= Escobar::Heroku::ConfigVars.new(client, id)
       end
 
+      def log_drains
+        @log_drains ||= client.heroku.get("/apps/#{id}/log-drains")
+      end
+
       def dashboard_url
         "https://dashboard.heroku.com/apps/#{name}"
       end
@@ -52,13 +56,35 @@ module Escobar
       def locked?
         response = client.heroku.get("/apps/#{id}/config-vars")
         response["id"] == "two_factor"
-      rescue Escobar::Heroku::Client::HTTPError => e
+      rescue Escobar::Client::HTTPError => e
         response = JSON.parse(e.response.body)
         response["id"] == "two_factor"
       end
 
+      def direct_to_drain?
+        !log_drains.is_a?(Array)
+      end
+
+      def drain_token
+        @drain_token ||= drain && drain["token"]
+      end
+
+      def log_url
+        @log_url ||= "#{dashboard_url}/logs"
+      end
+
       def build_request_for(pipeline)
         Escobar::Heroku::BuildRequest.new(pipeline, id)
+      end
+
+      def drain
+        @drain ||= log_drains.find do |drain|
+          drain["url"].match(heroku_drain_url_pattern)
+        end
+      end
+
+      def heroku_drain_url_pattern
+        %r{forward\.log\.herokai\.com:9999|logs\.herokai\.com\/logs}
       end
     end
   end
