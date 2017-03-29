@@ -45,7 +45,7 @@ module Escobar
         promotion = Escobar::Heroku::PipelinePromotion.new(
           self, source, targets
         )
-        promotion.create(source, targets)
+        promotion.create
       end
 
       def github_repository
