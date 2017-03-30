@@ -41,13 +41,6 @@ module Escobar
         couplings.any? && github_repository
       end
 
-      def promote(source, targets)
-        promotion = Escobar::Heroku::PipelinePromotion.new(
-          self, source, targets
-        )
-        promotion.create
-      end
-
       def github_repository
         remote_repository["repository"] &&
           remote_repository["repository"]["name"]
@@ -135,6 +128,13 @@ module Escobar
         )
 
         heroku_build
+      end
+
+      def promote(source, targets, environment, force = false, payload = {})
+        promotion_request = PipelinePromotionRequest.new(
+          client, self, source, targets
+        )
+        promotion_request.create(environment, force, payload)
       end
 
       def get(path)
