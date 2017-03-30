@@ -58,7 +58,7 @@ module Escobar
           name: pipeline_name,
           repo: repository,
           app_id: app_id,
-          app_name: app_name,
+          app_name: app.name,
           build_id: build_id,
           release_id: id,
           command_id: command_id,

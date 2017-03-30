@@ -3,9 +3,9 @@ module Escobar
     # Class reperesenting a Heroku Pipeline Promotion
     class PipelinePromotion
       attr_reader :client, :id, :name, :pipeline, :source, :targets
-      def initialize(pipeline, source, targets)
+      def initialize(client, pipeline, source, targets)
         @id       = pipeline.id
-        @client   = pipeline.client
+        @client   = client
         @pipeline = pipeline
         @source   = source
         @targets  = targets
@@ -17,6 +17,7 @@ module Escobar
 
       def create
         response = client.heroku.post(promotion_path, body)
+        sleep 2 # releases aren't present immediately
         results = Escobar::Heroku::PipelinePromotionTargets.new(
           self, response
         )
@@ -25,9 +26,9 @@ module Escobar
 
       def body
         {
-          pipline: { id: id },
+          pipeline: { id: id },
           source: { app: { id: source.id } },
-          targets: targets.map(&:id)
+          targets: targets.map { |t| { app: { id: t.id } } }
         }
       end
     end

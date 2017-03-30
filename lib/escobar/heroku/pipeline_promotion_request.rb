@@ -7,28 +7,29 @@ module Escobar
 
       attr_accessor :environment, :ref, :forced, :custom_payload
 
-      def initialize(pipeline, source, targets)
-        @id       = pipeline.id
-        @client   = pipeline.client
-        @pipeline = pipeline
-        @source   = source
-        @targets  = targets
+      def initialize(client, pipeline, source, targets)
+        @id          = pipeline.id
+        @client      = client
+        @pipeline    = pipeline
+        @source      = source
+        @targets     = targets || []
       end
 
       def create(environment, forced, custom_payload)
-        raise ArgumentError, "No target applications" if @target.empty?
+        raise ArgumentError, "No target applications" if targets.empty?
         @environment = environment
         @forced = forced
         @custom_payload = custom_payload
 
+        fill_promotion_target_urls
         create_in_api
       end
 
       def create_in_api
-        create_github_deployment(environment, custom_payload)
         promotion = Escobar::Heroku::PipelinePromotion.new(
-          self, source, targets
+          client, pipeline, source, targets
         )
+
         releases = promotion.create
         handle_github_deployment_statuses_for(releases)
         releases
@@ -36,22 +37,34 @@ module Escobar
 
       def handle_github_deployment_statuses_for(releases)
         releases.each do |release|
-          custom_payload_for_app = custom_payload.merge(app_id: release.app.id)
-          unless github_deployment_url
-            create_github_deployment(environment, custom_payload_for_app)
-          end
-          release.github_url = github_deployment_url
+          release.sha = release.ref
+          release.github_url = target_urls[release.app.id]
+          release.pipeline_name = pipeline.name
+
           create_github_deployment_status(
-            github_deployment_url,
+            release.github_url,
             release.dashboard_build_output_url,
             "pending",
             "Promotion releasing.."
           )
-          @github_deployment_url = nil
         end
       end
 
       private
+
+      def target_urls
+        @target_urls ||= {}
+      end
+
+      def fill_promotion_target_urls
+        targets.each do |target|
+          custom_payload_for_app = custom_payload.merge(
+            app_id: target.id, name: target.name
+          )
+          create_github_deployment(environment, custom_payload_for_app)
+          target_urls[target.id] = github_deployment_url
+        end
+      end
 
       def create_github_deployment_status(url, target_url, state, description)
         payload = {
@@ -60,6 +73,10 @@ module Escobar
           description: description
         }
         create_deployment_status(url, payload)
+      end
+
+      def create_deployment_status(url, payload)
+        github_client.create_deployment_status(url, payload)
       end
 
       def create_github_deployment(environment, custom_payload)

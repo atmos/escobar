@@ -2,7 +2,7 @@ module Escobar
   module Heroku
     # Class reperesenting a Heroku Pipeline Promotion Targets
     class PipelinePromotionTargets
-      attr_reader :client, :id, :name, :pipline, :promotion
+      attr_reader :client, :id, :name, :pipeline, :promotion
       def initialize(pipeline, promotion)
         @id       = promotion["id"]
         @name     = pipeline.name
@@ -33,7 +33,7 @@ module Escobar
       end
 
       def info
-        @info ||= client.heroku.get(promotion_path)
+        @info ||= client.heroku.get(targets_path)
       end
 
       def releases

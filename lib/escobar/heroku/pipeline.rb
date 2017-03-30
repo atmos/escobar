@@ -136,7 +136,7 @@ module Escobar
       # force: true if github commit status checks shouldn't be verified
       # payload: Extra info to insert into the github deployment API
       def promote(source, targets, environment, force = false, payload = {})
-        promotion_request = PipelinePromotionRequest.new(
+        promotion_request = Escobar::Heroku::PipelinePromotionRequest.new(
           client, self, source, targets
         )
         promotion_request.create(environment, force, payload)
