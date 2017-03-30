@@ -17,7 +17,7 @@ module Escobar
 
       def create
         response = client.heroku.post(promotion_path, body)
-        sleep 2 # releases aren't present immediately
+        sleep 5 # releases aren't present immediately
         results = Escobar::Heroku::PipelinePromotionTargets.new(
           self, response
         )
