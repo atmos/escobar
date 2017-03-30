@@ -2,7 +2,7 @@ module Escobar
   module Heroku
     # Class reperesenting a Heroku Pipeline Promotion Targets
     class PipelinePromotionTargets
-      attr_reader :client, :id, :name, :pipline
+      attr_reader :client, :id, :name, :pipline, :promotion
       def initialize(pipeline, promotion)
         @id       = promotion["id"]
         @name     = pipeline.name
@@ -18,14 +18,14 @@ module Escobar
         promotion["source"]["app"]["id"]
       end
 
-      def release
+      def source_release
         @release ||= Escobar::Heroku::Release.new(
           client, app_id, nil, release_id
         )
       end
 
       def ref
-        @ref ||= release.ref
+        @ref ||= source_release.ref
       end
 
       def targets_path
