@@ -130,6 +130,11 @@ module Escobar
         heroku_build
       end
 
+      # source: A Escobar::Heroku::App to promote from
+      # targets: An array of Escobar::Heroku::App to promote to
+      # environment: The pipeline stage applying to the promotion
+      # force: true if github commit status checks shouldn't be verified
+      # payload: Extra info to insert into the github deployment API
       def promote(source, targets, environment, force = false, payload = {})
         promotion_request = PipelinePromotionRequest.new(
           client, self, source, targets
