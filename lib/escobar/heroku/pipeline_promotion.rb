@@ -18,7 +18,7 @@ module Escobar
       def create
         response = client.heroku.post(promotion_path, body)
         results = Escobar::Heroku::PipelinePromotionTargets.new(
-          self, response["id"]
+          self, response
         )
         results.releases
       end
