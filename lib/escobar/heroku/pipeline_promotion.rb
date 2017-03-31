@@ -2,7 +2,8 @@ module Escobar
   module Heroku
     # Class reperesenting a Heroku Pipeline Promotion
     class PipelinePromotion
-      attr_reader :client, :id, :name, :pipeline, :source, :targets
+      attr_reader :client, :id, :name, :pipeline,
+                  :source, :targets, :second_factor
       def initialize(client, pipeline, source, targets, second_factor)
         @id = pipeline.id
         @client = client
