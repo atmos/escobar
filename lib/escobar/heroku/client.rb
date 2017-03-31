@@ -42,11 +42,14 @@ module Escobar
         end
       end
 
-      def post(path, body)
+      def post(path, body, second_factor = nil)
         with_error_handling do
           response = client.post do |request|
             request.url path
             request_defaults(request)
+            if second_factor
+              request.headers["Heroku-Two-Factor-Code"] = second_factor
+            end
             request.body = body.to_json
           end
 
