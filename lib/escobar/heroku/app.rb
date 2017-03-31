@@ -28,6 +28,10 @@ module Escobar
         end
       end
 
+      def current_release_ref
+        releases.first.ref
+      end
+
       def dynos
         @dynos ||= Escobar::Heroku::Dynos.new(client, id)
       end

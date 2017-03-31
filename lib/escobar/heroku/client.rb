@@ -48,7 +48,7 @@ module Escobar
             request.url path
             request_defaults(request)
             if second_factor
-              request.headers["Heroku-Two-Factor-Code"] = second_factor
+              request.headers["Heroku-Two-Factor-Code"] = second_factor.to_s
             end
             request.body = body.to_json
           end

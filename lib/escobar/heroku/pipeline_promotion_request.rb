@@ -5,7 +5,7 @@ module Escobar
       attr_reader :client, :id, :name, :pipeline, :source, :targets
       attr_reader :github_deployment_url, :sha
 
-      attr_accessor :environment, :ref, :forced, :custom_payload, :second_factor
+      attr_accessor :environment, :forced, :custom_payload, :second_factor
 
       def initialize(client, pipeline, source, targets, second_factor)
         @id = pipeline.id
@@ -82,7 +82,7 @@ module Escobar
 
       def create_github_deployment(environment, custom_payload)
         options = {
-          ref: ref,
+          ref: source.current_release_ref,
           task: "promote",
           auto_merge: false,
           payload: custom_payload.merge(custom_deployment_payload),
