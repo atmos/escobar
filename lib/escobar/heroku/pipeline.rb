@@ -135,9 +135,10 @@ module Escobar
       # environment: The pipeline stage applying to the promotion
       # force: true if github commit status checks shouldn't be verified
       # payload: Extra info to insert into the github deployment API
-      def promote(source, targets, environment, force = false, payload = {})
+      # second_factor: an OTP credential for protected resources
+      def promote(source, targets, environment, force = false, payload = {}, second_factor = nil)
         promotion_request = Escobar::Heroku::PipelinePromotionRequest.new(
-          client, self, source, targets
+          client, self, source, targets, second_factor
         )
         promotion_request.create(environment, force, payload)
       end

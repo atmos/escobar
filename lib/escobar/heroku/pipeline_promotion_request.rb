@@ -5,14 +5,15 @@ module Escobar
       attr_reader :client, :id, :name, :pipeline, :source, :targets
       attr_reader :github_deployment_url, :sha
 
-      attr_accessor :environment, :ref, :forced, :custom_payload
+      attr_accessor :environment, :ref, :forced, :custom_payload, :second_factor
 
-      def initialize(client, pipeline, source, targets)
-        @id          = pipeline.id
-        @client      = client
-        @pipeline    = pipeline
-        @source      = source
-        @targets     = targets || []
+      def initialize(client, pipeline, source, targets, second_factor)
+        @id = pipeline.id
+        @client = client
+        @pipeline = pipeline
+        @source = source
+        @targets = targets || []
+        @second_factor = second_factor
       end
 
       def create(environment, forced, custom_payload)
@@ -27,7 +28,7 @@ module Escobar
 
       def create_in_api
         promotion = Escobar::Heroku::PipelinePromotion.new(
-          client, pipeline, source, targets
+          client, pipeline, source, targets, second_factor
         )
 
         releases = promotion.create
