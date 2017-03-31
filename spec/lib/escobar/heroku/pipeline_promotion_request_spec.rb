@@ -18,6 +18,7 @@ describe Escobar::Heroku::PipelinePromotionRequest do
     stub_kolkrabbi_response("#{pipeline_path}/repository")
   end
 
+  # rubocop:disable Metrics/LineLength
   it "can promote a pipeline" do
     stub_heroku_response("/apps/760bc95e-8780-4c76-a688-3a4af92a3eee")
 
@@ -61,7 +62,9 @@ describe Escobar::Heroku::PipelinePromotionRequest do
       .with(headers: default_github_headers)
       .to_return(status: 200, body: response, headers: {})
 
-    releases = pipeline.promote(app, targets, "production", false, {})
+    releases = pipeline.promote(app, targets, "production", {})
     expect(releases).to_not be_empty
+    expect(releases.first.status).to eql("succeeded")
   end
+  # rubocop:enable Metrics/LineLength
 end
