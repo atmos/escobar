@@ -56,7 +56,7 @@ module Escobar
       def create_deployment(options)
         body = {
           ref: options[:ref] || "master",
-          task: "deploy",
+          task: options[:task] || "deploy",
           auto_merge: false,
           required_contexts: options[:required_contexts] || [],
           payload: options[:payload] || {},
