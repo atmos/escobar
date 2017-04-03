@@ -38,8 +38,10 @@ module Escobar
 
       def releases
         info.map do |target|
+          target_app_id     = target["app"]["id"]
+          target_release_id = target["release"]["id"]
           Escobar::Heroku::Release.new(
-            client, target["app"]["id"], nil, target["release"]["id"]
+            client, target_app_id, nil, target_release_id
           )
         end
       end
