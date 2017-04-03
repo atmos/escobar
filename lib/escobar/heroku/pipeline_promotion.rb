@@ -36,6 +36,10 @@ module Escobar
       class RequiresTwoFactorError < ArgumentError
       end
 
+      class MissingContextsError < \
+        Escobar::Heroku::BuildRequest::MissingContextsError
+      end
+
       def raise_2fa_error
         message = "Application requires second factor: #{pipeline.name}"
         raise RequiresTwoFactorError, message
