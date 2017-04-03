@@ -21,6 +21,9 @@ describe Escobar::Heroku::PipelinePromotionRequest do
   # rubocop:disable Metrics/LineLength
   it "can promote a pipeline" do
     stub_heroku_response("/apps/760bc95e-8780-4c76-a688-3a4af92a3eee")
+    stub_heroku_response("/apps/760bc95e-8780-4c76-a688-3a4af92a3eee/releases")
+    stub_heroku_response("/apps/760bc95e-8780-4c76-a688-3a4af92a3eee/releases/715b6e1d-542b-40e1-9c7b-3d3128e78873")
+    stub_heroku_response("/apps/760bc95e-8780-4c76-a688-3a4af92a3eee/slugs/c782eba3-db0f-44cd-a8cb-a7a3d41ef831")
 
     response = fixture_data("api.github.com/repos/atmos/slash-heroku/index")
     stub_request(:get, "https://api.github.com/repos/atmos/slash-heroku")

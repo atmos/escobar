@@ -122,6 +122,9 @@ module Escobar
         response
       end
 
+      MissingContextsError = \
+        Escobar::Heroku::BuildRequest::MissingContextsError
+
       def handle_github_deployment_error(response)
         error = Escobar::GitHub::DeploymentError.new(
           pipeline.github_repository, response, required_commit_contexts
