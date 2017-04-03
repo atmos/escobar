@@ -26,7 +26,7 @@ module Escobar
           )
           results.releases
         else
-          raise ArgumentError(response.to_json)
+          raise ArgumentError, response.to_json
         end
       end
 
