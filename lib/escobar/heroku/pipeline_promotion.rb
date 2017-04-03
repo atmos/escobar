@@ -19,11 +19,15 @@ module Escobar
 
       def create
         response = client.heroku.post(promotion_path, body, second_factor)
-        sleep 2 # releases aren't present immediately
-        results = Escobar::Heroku::PipelinePromotionTargets.new(
-          self, response
-        )
-        results.releases
+        if response["id"] =~ Escobar::UUID_REGEX
+          sleep 2 # releases aren't present immediately
+          results = Escobar::Heroku::PipelinePromotionTargets.new(
+            self, response
+          )
+          results.releases
+        else
+          raise ArgumentError(response.to_json)
+        end
       end
 
       def body
