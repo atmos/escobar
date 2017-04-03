@@ -19,15 +19,26 @@ module Escobar
 
       def create
         response = client.heroku.post(promotion_path, body, second_factor)
-        if response["id"] =~ Escobar::UUID_REGEX
+        case response["id"]
+        when Escobar::UUID_REGEX
           sleep 2 # releases aren't present immediately
           results = Escobar::Heroku::PipelinePromotionTargets.new(
             self, response
           )
           results.releases
+        when "two_factor"
+          raise_2fa_error
         else
           raise ArgumentError, response.to_json
         end
+      end
+
+      class RequiresTwoFactorError < ArgumentError
+      end
+
+      def raise_2fa_error
+        message = "Application requires second factor: #{app.name}"
+        raise RequiresTwoFactorError, message
       end
 
       def body
