@@ -2,12 +2,13 @@ module Escobar
   module Heroku
     # Class reperesenting a Heroku Pipeline Promotion Targets
     class PipelinePromotionTargets
-      attr_reader :client, :id, :name, :pipeline, :promotion
+      attr_reader :client, :id, :name, :pipeline, :promotion, :retries
       def initialize(pipeline, promotion)
         @id       = promotion["id"]
         @name     = pipeline.name
         @client   = pipeline.client
         @pipeline = pipeline
+        @retries  = 10
       end
 
       def release_id
@@ -44,6 +45,16 @@ module Escobar
             client, target_app_id, nil, target_release_id
           )
         end
+      rescue NoMethodError
+        if retry?
+          sleep 0.5
+          retries -= 1
+          retry
+        end
+      end
+
+      def retry?
+        retries.positive?
       end
     end
   end

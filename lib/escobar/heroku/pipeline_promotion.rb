@@ -21,7 +21,6 @@ module Escobar
         response = client.heroku.post(promotion_path, body, second_factor)
         case response["id"]
         when Escobar::UUID_REGEX
-          sleep 2 # releases aren't present immediately
           results = Escobar::Heroku::PipelinePromotionTargets.new(
             self, response
           )
