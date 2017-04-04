@@ -40,7 +40,7 @@ module Escobar
       end
 
       def raise_2fa_error
-        message = "Application requires second factor: #{pipeline.name}"
+        message = "Pipeline requires second factor: #{pipeline.name}"
         raise RequiresTwoFactorError, message
       end
 
