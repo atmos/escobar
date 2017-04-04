@@ -4,8 +4,6 @@ module Escobar
     class PipelinePromotionTargets
       attr_reader :client, :id, :name, :pipeline, :promotion
 
-      attr_accessor :retries
-
       def initialize(pipeline, promotion)
         @id       = promotion["id"]
         @name     = pipeline.name
@@ -51,7 +49,7 @@ module Escobar
       rescue NoMethodError
         if retry?
           sleep 0.5
-          retries -= 1
+          @retries -= 1
           retry
         end
       end
