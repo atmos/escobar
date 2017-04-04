@@ -9,7 +9,7 @@ module Escobar
         @name     = pipeline.name
         @client   = pipeline.client
         @pipeline = pipeline
-        @retries  = 20
+        @retries  = 30
       end
 
       def release_id
@@ -48,7 +48,7 @@ module Escobar
         end
       rescue NoMethodError
         if retry?
-          sleep 0.5
+          sleep 1
           @retries -= 1
           retry
         else
