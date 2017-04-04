@@ -9,7 +9,7 @@ module Escobar
         @name     = pipeline.name
         @client   = pipeline.client
         @pipeline = pipeline
-        @retries  = 10
+        @retries  = 20
       end
 
       def release_id
