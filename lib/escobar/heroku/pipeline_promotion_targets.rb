@@ -51,6 +51,8 @@ module Escobar
           sleep 0.5
           @retries -= 1
           retry
+        else
+          raise ArgumentError, info.to_json
         end
       end
 
