@@ -47,14 +47,11 @@ module Escobar
           )
         end
       rescue NoMethodError
-        if retry?
-          sleep 0.5
-          @retries -= 1
-          @info = nil
-          retry
-        else
-          raise ArgumentError, info.to_json
-        end
+        raise(ArgumentError, info.to_json) unless retry?
+        sleep 0.5
+        @retries -= 1
+        @info = nil
+        retry
       end
 
       def retry?
