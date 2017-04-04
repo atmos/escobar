@@ -43,4 +43,19 @@ describe Escobar::Heroku::Release do
     expect(release.status).to eql("succeeded")
     expect(release.build.status).to eql("succeeded")
   end
+
+  it "knows the slug ref" do
+    release = Escobar::Heroku::Release.new(
+      client,
+      app.id,
+      "b80207dc-139f-4546-aedc-985d9cfcafab",
+      "23fe935d-88c8-4fd0-b035-10d44f3d9059"
+    )
+
+    stub_heroku_response(
+      "/apps/#{app.id}/slugs/c782eba3-db0f-44cd-a8cb-a7a3d41ef831"
+    )
+
+    expect(release.ref).to eql("f7c319ed2be5d9de5d6bc71665101d6f49836439")
+  end
 end

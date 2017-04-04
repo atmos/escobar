@@ -1,0 +1,16 @@
+[
+  {
+    "app": {
+      "id": "b0deddbf-cf56-48e4-8c3a-3ea143be2333"
+    },
+    "error_message": null,
+    "id": "441e672b-fbb4-4e64-bb75-f9c1f5b53186",
+    "pipeline_promotion": {
+      "id": "5cf65076-74be-4335-9387-26ef2c08678f"
+    },
+    "release": {
+      "id": "23fe935d-88c8-4fd0-b035-10d44f3d9059"
+    },
+    "status": "succeeded"
+  }
+]

@@ -1,6 +1,6 @@
 require_relative "../../../spec_helper"
 
-describe Escobar::Heroku::App do
+describe Escobar::Heroku::BuildRequest do
   let(:id) { "4c18c922-6eee-451c-b7c6-c76278652ccc" }
   let(:name) { "slash-heroku" }
   let(:client) { Escobar::Client.from_environment }

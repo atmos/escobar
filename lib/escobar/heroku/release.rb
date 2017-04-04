@@ -28,6 +28,14 @@ module Escobar
         @build ||= Escobar::Heroku::Build.new(client, app.id, build_id)
       end
 
+      def slug
+        @slug ||= Escobar::Heroku::Slug.new(client, app.id, info["slug"]["id"])
+      end
+
+      def ref
+        slug && slug.ref
+      end
+
       def dashboard_build_output_url
         "https://dashboard.heroku.com/apps/#{app.name}/activity/builds/#{id}"
       end
@@ -50,7 +58,7 @@ module Escobar
           name: pipeline_name,
           repo: repository,
           app_id: app_id,
-          app_name: app_name,
+          app_name: app.name,
           build_id: build_id,
           release_id: id,
           command_id: command_id,

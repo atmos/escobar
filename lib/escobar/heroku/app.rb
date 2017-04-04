@@ -28,6 +28,10 @@ module Escobar
         end
       end
 
+      def current_release_ref
+        releases.first.ref
+      end
+
       def dynos
         @dynos ||= Escobar::Heroku::Dynos.new(client, id)
       end
@@ -50,7 +54,7 @@ module Escobar
 
       # Accepts either google authenticator or yubikey second_factor formatting
       def preauth(second_factor)
-        !client.heroku.put("/apps/#{id}/pre-authorizations", second_factor).any?
+        client.heroku.put("/apps/#{id}/pre-authorizations", second_factor).none?
       end
 
       def locked?
