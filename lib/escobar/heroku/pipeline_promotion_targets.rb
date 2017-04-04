@@ -55,7 +55,7 @@ module Escobar
       end
 
       def retry?
-        retries.positive?
+        @retries.positive?
       end
     end
   end
