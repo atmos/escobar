@@ -65,7 +65,7 @@ describe Escobar::Heroku::PipelinePromotionRequest do
       .with(headers: default_github_headers)
       .to_return(status: 200, body: response, headers: {})
 
-    releases = pipeline.promote(app, targets, "production", {})
+    releases = pipeline.promote(app, targets, "production")
     expect(releases).to_not be_empty
     expect(releases.first.status).to eql("succeeded")
   end
@@ -97,7 +97,7 @@ describe Escobar::Heroku::PipelinePromotionRequest do
       .to_return(status: 403, body: response, headers: {})
 
     expect do
-      pipeline.promote(app, targets, "production", {})
+      pipeline.promote(app, targets, "production")
     end.to raise_error(Escobar::Heroku::PipelinePromotion::RequiresTwoFactorError)
   end
 
@@ -128,7 +128,7 @@ describe Escobar::Heroku::PipelinePromotionRequest do
       .to_return(status: 403, body: response, headers: {})
 
     expect do
-      pipeline.promote(app, targets, "production", {})
+      pipeline.promote(app, targets, "production")
     end.to raise_error(Escobar::Heroku::PipelinePromotion::MissingContextsError)
   end
   # rubocop:enable Metrics/LineLength

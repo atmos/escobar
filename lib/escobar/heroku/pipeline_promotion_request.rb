@@ -109,7 +109,7 @@ module Escobar
       end
 
       def required_commit_contexts
-        pipeline.required_commit_contexts(false)
+        pipeline.required_commit_contexts(forced)
       end
 
       def handle_github_deployment_response(response)
