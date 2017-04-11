@@ -65,7 +65,7 @@ describe Escobar::Heroku::PipelinePromotionRequest do
       .with(headers: default_github_headers)
       .to_return(status: 200, body: response, headers: {})
 
-    releases = pipeline.promote(app, targets, "production", {})
+    releases = pipeline.promote(app, targets, "production")
     expect(releases).to_not be_empty
     expect(releases.first.status).to eql("succeeded")
   end
