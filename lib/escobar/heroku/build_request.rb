@@ -164,7 +164,7 @@ module Escobar
       end
 
       def required_commit_contexts
-        return [] if forced || environment != "production"
+        return [] if forced
         pipeline.required_commit_contexts(false)
       end
 
