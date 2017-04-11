@@ -2,6 +2,8 @@ module Escobar
   module Heroku
     # Class representing an app's dyno state
     class Dynos
+      ONE_OFF_TYPES = %w{run scheduler}.freeze
+
       attr_reader :app_id, :client
 
       attr_accessor :command_id
@@ -18,7 +20,7 @@ module Escobar
       end
 
       def non_one_off
-        info.reject { |dyno| dyno["type"] == "run" }
+        info.reject { |dyno| ONE_OFF_TYPES.include?(dyno["type"]) }
       end
 
       def running?(release_id)
