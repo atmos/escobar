@@ -1,0 +1,30 @@
+{
+  "url": "https://api.github.com/repos/atmos/slash-heroku/deployments/22233197/statuses/38999643",
+  "id": 38999643,
+  "state": "failed",
+  "creator": {
+    "login": "atmos",
+    "id": 38,
+    "avatar_url": "https://avatars.githubusercontent.com/u/5178170?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/atmos",
+    "html_url": "https://github.com/atmos",
+    "followers_url": "https://api.github.com/users/atmos/followers",
+    "following_url": "https://api.github.com/users/atmos/following{/other_user}",
+    "gists_url": "https://api.github.com/users/atmos/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/atmos/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/atmos/subscriptions",
+    "organizations_url": "https://api.github.com/users/atmos/orgs",
+    "repos_url": "https://api.github.com/users/atmos/repos",
+    "events_url": "https://api.github.com/users/atmos/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/atmos/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "description": "Missing second factor",
+  "target_url": "https://dashboard.heroku.com/apps/slash-heroku-production/activity/builds/da9d8a34-4e6a-4b51-a484-a880ba164995",
+  "created_at": "2017-01-04T19:35:57Z",
+  "updated_at": "2017-01-04T19:35:57Z",
+  "deployment_url": "https://api.github.com/repos/atmos/slash-heroku/deployments/22233197",
+  "repository_url": "https://api.github.com/repos/atmos/slash-heroku"
+}
