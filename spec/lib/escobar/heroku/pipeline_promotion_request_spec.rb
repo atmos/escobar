@@ -96,6 +96,12 @@ describe Escobar::Heroku::PipelinePromotionRequest do
       .with(headers: default_heroku_headers)
       .to_return(status: 403, body: response, headers: {})
 
+    # Create failed statuses
+    response = fixture_data("api.github.com/repos/atmos/slash-heroku/deployments/22062424/statuses/failed-1")
+    stub_request(:post, "https://api.github.com/repos/atmos/slash-heroku/deployments/22062424/statuses")
+      .with(headers: default_github_headers)
+      .to_return(status: 200, body: response, headers: {})
+
     expect do
       pipeline.promote(app, targets, "production")
     end.to raise_error(Escobar::Heroku::PipelinePromotion::RequiresTwoFactorError)
