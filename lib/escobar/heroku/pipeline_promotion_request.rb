@@ -35,8 +35,8 @@ module Escobar
         handle_github_deployment_statuses_for(releases)
         releases
       rescue PipelinePromotion::RequiresTwoFactorError
-       handle_2fa_failure
-       raise
+        handle_2fa_failure
+        raise
       end
 
       def handle_2fa_failure
