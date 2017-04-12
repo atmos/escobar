@@ -34,6 +34,20 @@ module Escobar
         releases = promotion.create
         handle_github_deployment_statuses_for(releases)
         releases
+      rescue PipelinePromotion::RequiresTwoFactorError
+        handle_2fa_failure
+        raise
+      end
+
+      def handle_2fa_failure
+        target_urls.values.each do |target_url|
+          create_github_deployment_status(
+            target_url,
+            nil,
+            "error",
+            "Missing second factor"
+          )
+        end
       end
 
       def handle_github_deployment_statuses_for(releases)
