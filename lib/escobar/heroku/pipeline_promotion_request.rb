@@ -44,7 +44,7 @@ module Escobar
           create_github_deployment_status(
             target_url,
             nil,
-            "failed",
+            "error",
             "Missing second factor"
           )
         end

@@ -1,7 +1,7 @@
 {
   "url": "https://api.github.com/repos/atmos/slash-heroku/deployments/22233197/statuses/38999643",
   "id": 38999643,
-  "state": "failed",
+  "state": "error",
   "creator": {
     "login": "atmos",
     "id": 38,
