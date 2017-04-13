@@ -27,6 +27,16 @@ module Escobar
         error.set_backtrace(err.backtrace)
         error
       end
+
+      def self.from_response(resp)
+        error = new("Error from Heroku API")
+
+        error.body    = resp.body
+        error.headers = resp.headers
+        error.status  = resp.status
+
+        error
+      end
     end
 
     def self.from_environment
