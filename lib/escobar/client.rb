@@ -39,6 +39,10 @@ module Escobar
       end
     end
 
+    module Error
+      class Unauthorized < HTTPError; end
+    end
+
     def self.from_environment
       new(Escobar.github_api_token, Escobar.heroku_api_token)
     end
