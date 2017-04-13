@@ -20,31 +20,29 @@ module Escobar
       end
 
       def get(path, version = 3)
-        with_error_handling do
-          response = client.get do |request|
+        response = with_error_handling do
+          client.get do |request|
             request.url path
             request_defaults(request, version)
           end
-
-          JSON.parse(response.body)
         end
+        JSON.parse(response.body)
       end
 
       def get_range(path, range, version = 3)
-        with_error_handling do
-          response = client.get do |request|
+        response = with_error_handling do
+          client.get do |request|
             request.url path
             request_defaults(request, version)
             request.headers["Range"] = range
           end
-
-          JSON.parse(response.body)
         end
+        JSON.parse(response.body)
       end
 
       def post(path, body, second_factor = nil)
-        with_error_handling do
-          response = client.post do |request|
+        response = with_error_handling do
+          client.post do |request|
             request.url path
             request_defaults(request)
             if second_factor
@@ -52,33 +50,40 @@ module Escobar
             end
             request.body = body.to_json
           end
-
-          JSON.parse(response.body)
         end
+        JSON.parse(response.body)
       end
 
       def put(path, second_factor = nil)
-        with_error_handling do
-          response = client.put do |request|
+        response = with_error_handling do
+          client.put do |request|
             request.url path
             request_defaults(request)
             if second_factor
               request.headers["Heroku-Two-Factor-Code"] = second_factor
             end
           end
-
-          JSON.parse(response.body)
         end
+        JSON.parse(response.body)
       end
 
       private
 
       def with_error_handling
-        yield
+        resp = yield
+        raise_on_status(resp)
+        resp
       rescue Net::OpenTimeout, Faraday::TimeoutError => e
         raise Escobar::Client::TimeoutError.wrap(e)
       rescue Faraday::Error::ClientError => e
         raise Escobar::Client::HTTPError.from_error(e)
+      end
+
+      def raise_on_status(resp)
+        case resp.status
+        when 401
+          raise Escobar::Client::Error::Unauthorized.from_response(resp)
+        end
       end
 
       def client
