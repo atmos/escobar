@@ -78,7 +78,7 @@ module Escobar
       rescue Net::OpenTimeout, Faraday::TimeoutError => e
         raise Escobar::Client::TimeoutError.wrap(e)
       rescue Faraday::Error::ClientError => e
-        raise Escobar::Client::HTTPError.from_response(e)
+        raise Escobar::Client::HTTPError.from_error(e)
       end
 
       def client

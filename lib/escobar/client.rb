@@ -17,7 +17,7 @@ module Escobar
     # Class for returning API errors to escobar clients
     class HTTPError < StandardError
       attr_accessor :body, :headers, :status
-      def self.from_response(err)
+      def self.from_error(err)
         error = new("Error from Heroku API")
 
         error.body    = err.response[:body]
