@@ -9,6 +9,14 @@ RSpec.describe Escobar::Heroku::Client do
     end.to raise_error(Escobar::Client::TimeoutError)
   end
 
+  it "should raise on unauthorized error" do
+    stub_request(:get, "https://api.heroku.com/account")
+      .to_return(body: {}.to_json, status: 401)
+    expect do
+      client.get("/account")
+    end.to raise_error(Escobar::Client::Error::Unauthorized)
+  end
+
   it "should correctly handle response from a Faraday ClientError" do
     faraday_error = Faraday::Error::ClientError.new(
       "message",
