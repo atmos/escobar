@@ -58,7 +58,7 @@ module Escobar
 
           create_github_deployment_status(
             release.github_url,
-            release.dashboard_build_output_url,
+            release.dashboard_release_output_url,
             "pending",
             "Promotion releasing.."
           )
