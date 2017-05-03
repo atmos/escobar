@@ -64,4 +64,16 @@ describe Escobar::Heroku::Dynos do
 
     expect(dynos).to be_running("715b6e1d-542b-40e1-9c7b-3d3128e78873")
   end
+
+  it "runs at least a given version" do
+    path = "/apps/b0deddbf-cf56-48e4-8c3a-3ea143be2333/dynos"
+    stub_request(:get, "https://api.heroku.com#{path}")
+      .with(headers: default_heroku_headers)
+      .to_return(
+        status: 200, body: fixture_data("api.heroku.com#{path}-with-scheduler")
+      )
+
+    expect(dynos).to be_running_at_least(80)
+    expect(dynos).to be_running_at_least(10)
+  end
 end
