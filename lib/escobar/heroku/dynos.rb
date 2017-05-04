@@ -29,6 +29,12 @@ module Escobar
         end
       end
 
+      def running_at_least?(version)
+        non_one_off.all? do |dyno|
+          dyno["release"]["version"] >= version && dyno["state"] == "up"
+        end
+      end
+
       def newer_than?(epoch)
         non_one_off.all? do |dyno|
           epoch < Time.parse(dyno["created_at"]).utc
