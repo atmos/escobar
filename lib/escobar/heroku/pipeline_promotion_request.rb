@@ -58,7 +58,7 @@ module Escobar
 
           create_github_deployment_status(
             release.github_url,
-            release.dashboard_build_output_url,
+            release.dashboard_release_output_url,
             "pending",
             "Promotion releasing.."
           )
@@ -138,6 +138,12 @@ module Escobar
 
       class MissingContextsError < \
         Escobar::Heroku::PipelinePromotion::MissingContextsError
+      end
+
+      class Error < Escobar::Heroku::BuildRequest::Error; end
+
+      def error_for(message)
+        Error.new_from_build_request(self, message)
       end
 
       def handle_github_deployment_error(response)

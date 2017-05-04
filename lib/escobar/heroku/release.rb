@@ -36,8 +36,8 @@ module Escobar
         slug && slug.ref
       end
 
-      def dashboard_build_output_url
-        "https://dashboard.heroku.com/apps/#{app.name}/activity/builds/#{id}"
+      def dashboard_release_output_url
+        "https://dashboard.heroku.com/apps/#{app.name}/activity/releases/#{id}"
       end
 
       def repository
@@ -62,7 +62,7 @@ module Escobar
           build_id: build_id,
           release_id: id,
           command_id: command_id,
-          target_url: dashboard_build_output_url,
+          target_url: dashboard_release_output_url,
           deployment_url: github_url
         }
       end
