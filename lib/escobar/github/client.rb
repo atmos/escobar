@@ -133,12 +133,16 @@ module Escobar
         Faraday.new(url: "https://api.github.com") do |c|
           c.use :instrumentation
           c.use ZipkinTracer::FaradayHandler, "api.github.com"
+          c.use Escobar::GitHub::Response::RaiseError
           c.adapter Faraday.default_adapter
         end
       end
 
       def default_client
-        Faraday.new(url: "https://api.github.com")
+        Faraday.new(url: "https://api.github.com") do |c|
+          c.use Escobar::GitHub::Response::RaiseError
+          c.adapter Faraday.default_adapter
+        end
       end
     end
   end

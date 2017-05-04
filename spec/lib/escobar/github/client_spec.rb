@@ -57,6 +57,16 @@ describe Escobar::GitHub::Client do
         slash_heroku.default_branch
       end.to raise_error(Escobar::GitHub::RepoNotFound)
     end
+
+    it "raises a Unauthorized error if we get a 401" do
+      stub_request(:get, "https://api.github.com/repos/atmos/slash-heroku")
+        .with(headers: default_github_headers)
+        .to_return(status: 401, body: {}.to_json, headers: {})
+
+      expect do
+        slash_heroku.default_branch
+      end.to raise_error(Escobar::Client::Error::Unauthorized)
+    end
   end
 
   describe "#required_contexts" do
