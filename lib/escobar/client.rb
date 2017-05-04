@@ -28,8 +28,18 @@ module Escobar
         error
       end
 
-      def self.from_response(resp)
-        error = new("Error from Heroku API")
+      def self.from_response_env(resp, message = "Error from Heroku API")
+        error = new(message)
+
+        error.body    = resp.body
+        error.headers = resp.response_headers
+        error.status  = resp.status
+
+        error
+      end
+
+      def self.from_response(resp, message = "Error from Heroku API")
+        error = new(message)
 
         error.body    = resp.body
         error.headers = resp.headers
