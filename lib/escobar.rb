@@ -59,6 +59,7 @@ module Escobar
 end
 
 require_relative "./escobar/client"
+require_relative "./escobar/github/response/raise_error"
 require_relative "./escobar/github/client"
 require_relative "./escobar/github/deployment_error"
 require_relative "./escobar/heroku/app"

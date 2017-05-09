@@ -146,7 +146,7 @@ module Escobar
           github_deployment_url,
           heroku_build.dashboard_build_output_url,
           "pending",
-          "Build running.."
+          "Build running."
         )
       end
 
