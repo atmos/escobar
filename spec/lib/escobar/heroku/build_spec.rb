@@ -41,4 +41,13 @@ describe Escobar::Heroku::Build do
         "builds/b80207dc-139f-4546-aedc-985d9cfcafab"
       )
   end
+
+  it "handles mixed case github url" do
+    build = Escobar::Heroku::Build.new(
+      client, app.id, "b80207dc-139f-4546-aedc-985d9cfcafab"
+    )
+
+    build.github_url = "https://api.github.com/repos/HEROKU/Slash-Heroku/deployments/9876543210" # rubocop:disable LineLength
+    expect(build.repository).to eql("HEROKU/Slash-Heroku")
+  end
 end

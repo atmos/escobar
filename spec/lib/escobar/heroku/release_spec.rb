@@ -58,4 +58,15 @@ describe Escobar::Heroku::Release do
 
     expect(release.ref).to eql("f7c319ed2be5d9de5d6bc71665101d6f49836439")
   end
+
+  it "handles mixed case github url" do
+    release = Escobar::Heroku::Release.new(
+      client,
+      app.id,
+      "b80207dc-139f-4546-aedc-985d9cfcafab",
+      "23fe935d-88c8-4fd0-b035-10d44f3d9059"
+    )
+    release.github_url = "https://api.github.com/repos/HEROKU/Slash-Heroku/releases/23fe935d-88c8-4fd0-b035-10d44f3d9059" # rubocop:disable LineLength
+    expect(release.repository).to eql("HEROKU/Slash-Heroku")
+  end
 end

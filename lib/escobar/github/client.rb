@@ -1,5 +1,7 @@
 module Escobar
   module GitHub
+    REPOSITORY_REGEX = %r{https:\/\/api\.github\.com\/repos\/([-_\.0-9a-zA-Z]+\/[-_\.0-9a-zA-Z]+)} # rubocop:disable LineLength
+
     class RepoNotFound < StandardError; end
     # Top-level class for interacting with GitHub API
     class Client
