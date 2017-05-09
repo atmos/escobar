@@ -39,12 +39,8 @@ module Escobar
         "https://dashboard.heroku.com/apps/#{app.name}/activity/builds/#{id}"
       end
 
-      def repository_regex
-        %r{https:\/\/api\.github\.com\/repos\/([-_\.0-9a-z]+\/[-_\.0-9a-z]+)}
-      end
-
       def repository
-        github_url && github_url.match(repository_regex)[1]
+        github_url && github_url.match(Escobar::GitHub::REPOSITORY_REGEX)[1]
       end
 
       def to_job_json

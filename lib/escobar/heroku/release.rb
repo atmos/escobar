@@ -41,11 +41,7 @@ module Escobar
       end
 
       def repository
-        github_url && github_url.match(repository_regex)[1]
-      end
-
-      def repository_regex
-        %r{https:\/\/api\.github\.com\/repos\/([-_\.0-9a-z]+\/[-_\.0-9a-z]+)}
+        github_url && github_url.match(Escobar::GitHub::REPOSITORY_REGEX)[1]
       end
 
       def status
