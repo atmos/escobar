@@ -73,7 +73,8 @@ module Escobar
         resp = yield
         raise_on_status(resp)
         resp
-      rescue Net::OpenTimeout, Faraday::TimeoutError => e
+      rescue Net::OpenTimeout, Faraday::TimeoutError,
+             Faraday::Error::ConnectionFailed => e
         raise Escobar::Client::TimeoutError.wrap(e)
       rescue Faraday::Error::ClientError => e
         raise Escobar::Client::HTTPError.from_error(e)
