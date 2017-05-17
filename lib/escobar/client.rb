@@ -51,7 +51,7 @@ module Escobar
 
     module Error
       class Unauthorized < HTTPError; end
-      class TwoFactorMissing < HTTPError; end
+      class SecondFactor < HTTPError; end
     end
 
     def self.from_environment
