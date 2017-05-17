@@ -60,7 +60,7 @@ module Escobar
             request.url path
             request_defaults(request)
             if second_factor
-              request.headers["Heroku-Two-Factor-Code"] = second_factor
+              request.headers["Heroku-Two-Factor-Code"] = second_factor.to_s
             end
           end
         end
@@ -83,6 +83,9 @@ module Escobar
       def raise_on_status(resp)
         case resp.status
         when 401
+          body = JSON.parse(resp.body)
+          raise Escobar::Client::Error::SecondFactor.from_response(resp) \
+            if body["id"] == "two_factor"
           raise Escobar::Client::Error::Unauthorized.from_response(resp)
         end
       end
