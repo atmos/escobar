@@ -27,7 +27,7 @@ RSpec.describe Escobar::Heroku::Client do
 
   it "should raise on invalid two factor error" do
     stub_request(:get, "https://api.heroku.com/account")
-      .to_return(body: { id: "two_factor" }.to_json, status: 401)
+      .to_return(body: fixture_data("api.heroku.com/failed-2fa"), status: 401)
     expect do
       client.get("/account")
     end.to raise_error(Escobar::Client::Error::SecondFactor)

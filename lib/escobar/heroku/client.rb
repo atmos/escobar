@@ -85,7 +85,7 @@ module Escobar
         when 401
           body = JSON.parse(resp.body)
           raise Escobar::Client::Error::SecondFactor.from_response(resp) \
-            if body["id"] == "two_factor"
+            if body["message"]&.match(/factor/)
           raise Escobar::Client::Error::Unauthorized.from_response(resp)
         end
       end
