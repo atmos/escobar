@@ -50,11 +50,27 @@ module Escobar
   end
 
   def self.http_open_timeout
-    3
+    if http_open_timeout_from_environment
+      http_open_timeout_from_environment.to_i
+    else
+      3
+    end
   end
 
   def self.http_timeout
-    6
+    if http_timeout_from_environment
+      http_timeout_from_environment.to_i
+    else
+      6
+    end
+  end
+
+  def self.http_open_timeout_from_environment
+    ENV["ESCOBAR_HTTP_OPEN_TIMEOUT"]
+  end
+
+  def self.http_timeout_from_environment
+    ENV["ESCOBAR_HTTP_TIMEOUT"]
   end
 end
 
