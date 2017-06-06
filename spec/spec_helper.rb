@@ -72,9 +72,9 @@ RSpec.configure do |config|
     }
   end
 
-  def default_heroku_headers
+  def default_heroku_headers(version = 3)
     {
-      "Accept"          => "application/vnd.heroku+json; version=3",
+      "Accept"          => "application/vnd.heroku+json; version=#{version}",
       "Accept-Encoding" => "",
       "Authorization"   => "Bearer #{Escobar.heroku_api_token}",
       "Content-Type"    => "application/json",

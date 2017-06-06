@@ -1,0 +1,10 @@
+{
+  "capabilities": [
+    {
+      "capability": "view",
+      "capable": false,
+      "resource_id": "7bd2a1ac-1ed2-4fc5-b374-6c2ca276c340",
+      "resource_type": "app"
+    }
+  ]
+}

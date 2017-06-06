@@ -54,14 +54,15 @@ module Escobar
         JSON.parse(response.body)
       end
 
-      def put(path, second_factor = nil)
+      def put(path, body, second_factor = nil, version = 3)
         response = with_error_handling do
           client.put do |request|
             request.url path
-            request_defaults(request)
+            request_defaults(request, version)
             if second_factor
               request.headers["Heroku-Two-Factor-Code"] = second_factor.to_s
             end
+            request.body = body.to_json
           end
         end
         JSON.parse(response.body)
