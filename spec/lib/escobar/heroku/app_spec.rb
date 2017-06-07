@@ -21,8 +21,9 @@ describe Escobar::Heroku::App do
     expect(app.name).to eql("slash-heroku-production")
 
     path = "/apps/b0deddbf-cf56-48e4-8c3a-3ea143be2333/pre-authorizations"
+    headers = default_heroku_headers.merge("Heroku-Two-Factor-Code": "867530")
     stub_request(:put, "https://api.heroku.com#{path}")
-      .with(headers: default_heroku_headers)
+      .with(headers: headers)
       .to_return(
         status: 200, body: fixture_data("api.heroku.com#{path}")
       )
@@ -33,8 +34,9 @@ describe Escobar::Heroku::App do
     expect(app.name).to eql("slash-heroku-production")
 
     path = "/apps/b0deddbf-cf56-48e4-8c3a-3ea143be2333/pre-authorizations"
+    headers = default_heroku_headers.merge("Heroku-Two-Factor-Code": "867530")
     stub_request(:put, "https://api.heroku.com#{path}")
-      .with(headers: default_heroku_headers)
+      .with(headers: headers)
       .to_return(
         status: 200, body: fixture_data("api.heroku.com#{path}-failed")
       )

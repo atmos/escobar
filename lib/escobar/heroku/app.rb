@@ -54,7 +54,7 @@ module Escobar
 
       # Accepts either google authenticator or yubikey second_factor formatting
       def preauth(second_factor)
-        heroku.put("/apps/#{id}/pre-authorizations", "", second_factor).none?
+        heroku.put("/apps/#{id}/pre-authorizations", {}, second_factor).none?
       end
 
       def locked?
