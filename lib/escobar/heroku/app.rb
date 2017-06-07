@@ -13,11 +13,11 @@ module Escobar
       end
 
       def info
-        @info ||= client.heroku.get("/apps/#{id}")
+        @info ||= heroku.get("/apps/#{id}")
       end
 
       def releases_json
-        @releases_json ||= client.heroku.get_range(
+        @releases_json ||= heroku.get_range(
           "/apps/#{id}/releases", "version; order=desc,max=25;"
         )
       end
@@ -41,7 +41,7 @@ module Escobar
       end
 
       def log_drains
-        @log_drains ||= client.heroku.get("/apps/#{id}/log-drains")
+        @log_drains ||= heroku.get("/apps/#{id}/log-drains")
       end
 
       def dashboard_url
@@ -54,12 +54,11 @@ module Escobar
 
       # Accepts either google authenticator or yubikey second_factor formatting
       def preauth(second_factor)
-        client.heroku
-              .put("/apps/#{id}/pre-authorizations", "", second_factor).none?
+        heroku.put("/apps/#{id}/pre-authorizations", "", second_factor).none?
       end
 
       def locked?
-        response = client.heroku.get("/apps/#{id}/config-vars")
+        response = heroku.get("/apps/#{id}/config-vars")
         response["id"] == "two_factor"
       rescue Escobar::Client::HTTPError => e
         response = JSON.parse(e.response.body)
@@ -90,6 +89,12 @@ module Escobar
 
       def heroku_drain_url_pattern
         %r{forward\.log\.herokai\.com:9999|logs\.herokai\.com\/logs}
+      end
+
+      private
+
+      def heroku
+        client.heroku
       end
     end
   end
