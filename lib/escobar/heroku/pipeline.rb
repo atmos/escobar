@@ -65,10 +65,14 @@ module Escobar
       end
 
       def default_branch
-        github_client.default_branch
+        @default_branch ||= github_client.default_branch
       end
 
       def required_commit_contexts(forced = false)
+        @required_commit_contexts ||= fetch_required_commit_contexts(forced)
+      end
+
+      def fetch_required_commit_contexts(forced = false)
         return [] if forced
         github_client.required_contexts.map do |context|
           if context == "continuous-integration/travis-ci"
