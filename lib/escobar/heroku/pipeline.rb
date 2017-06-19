@@ -46,6 +46,11 @@ module Escobar
           remote_repository["repository"]["name"]
       end
 
+      def github_repository_id
+        remote_repository["repository"] &&
+          remote_repository["repository"]["id"]
+      end
+
       def couplings
         @couplings ||= remote_couplings_without_test_stage
       end
